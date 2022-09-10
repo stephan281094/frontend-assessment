@@ -17,7 +17,7 @@ export default function ProductDetail() {
   );
 
   if (!product) {
-    return <h1>Product could not be found</h1>;
+    return <h1>Product kon niet gevonden worden</h1>;
   }
 
   return (

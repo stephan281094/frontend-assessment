@@ -19,9 +19,9 @@ type ToggleAction = {
   payload: number;
 };
 
-type Action = ClearAction | SetAction | ToggleAction;
-type Dispatch = (action: Action) => void;
-type State = number[];
+export type Action = ClearAction | SetAction | ToggleAction;
+export type Dispatch = (action: Action) => void;
+export type State = number[];
 
 const WishlistContext = createContext<
   { state: State; dispatch: Dispatch } | undefined
