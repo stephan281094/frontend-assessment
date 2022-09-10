@@ -11,7 +11,7 @@ export default function Favorites() {
     return wishlist.state
       .map((id) => products.find((product) => product.id === id))
       .filter(Boolean);
-  }, [wishlist.state]);
+  }, [products, wishlist.state]);
 
   return (
     <div className="py-6">

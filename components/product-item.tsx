@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Product } from "~/types/product";
 import HeartSvg from "./heart-svg";
@@ -10,8 +11,9 @@ interface Props {
 export default function ProductItem({ product, favorited = false }: Props) {
   return (
     <div className="group relative">
-      <div className="aspect-square w-full overflow-hidden group-hover:opacity-75">
-        <img
+      <div className="relative aspect-square w-full overflow-hidden group-hover:opacity-75">
+        <Image
+          layout="fill"
           src={product.image}
           alt=""
           className="h-full w-full object-cover object-center"
@@ -34,9 +36,9 @@ export default function ProductItem({ product, favorited = false }: Props) {
           </h3>
           <p className="mt-1 text-sm text-gray-500">{product.category}</p>
         </div>
-        <p className="pl-2 text-sm font-medium text-gray-900">
-          €{product.price.toFixed(2)}
-        </p>
+        <span className="whitespace-nowrap pl-2 text-sm font-medium text-gray-900">
+          € {product.price.toFixed(2)}
+        </span>
       </div>
     </div>
   );

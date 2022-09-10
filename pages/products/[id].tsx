@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import Button from "~/components/button";
@@ -12,7 +13,7 @@ export default function ProductDetail() {
 
   const product = useMemo(
     () => products.find((product) => String(product.id) === query.id),
-    [query.id]
+    [products, query.id]
   );
 
   if (!product) {
@@ -21,8 +22,9 @@ export default function ProductDetail() {
 
   return (
     <div className="group relative flex flex-col py-6 lg:flex-row">
-      <div className="aspect-square h-96 overflow-hidden">
-        <img
+      <div className="relative aspect-square h-96 overflow-hidden">
+        <Image
+          layout="fill"
           src={product.image}
           alt=""
           className="h-full w-full object-cover object-center lg:h-full lg:w-full"
@@ -33,8 +35,8 @@ export default function ProductDetail() {
           {product.title}
         </h1>
         <p className="text-gray-500">{product.description}</p>
-        <p className="text-lg font-medium text-gray-900">
-          €{product.price.toFixed(2)}
+        <p className="whitespace-nowrap text-lg font-medium text-gray-900">
+          € {product.price.toFixed(2)}
         </p>
         <div className="flex space-x-2">
           <FavoriteButton
