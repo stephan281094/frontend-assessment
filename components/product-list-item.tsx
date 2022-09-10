@@ -4,11 +4,22 @@ import { Product } from "~/types/product";
 import CrossSvg from "./cross-svg";
 
 interface Props {
-  product: Product;
+  onChange: (value: number) => void;
   onDelete: () => void;
+  product: Product;
+  quantity: number;
 }
 
-export default function ProductListItem({ product, onDelete }: Props) {
+export default function ProductListItem({
+  onChange,
+  onDelete,
+  product,
+  quantity,
+}: Props) {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(parseInt(event.target.value, 10));
+  };
+
   return (
     <div className="flex space-x-2 p-2">
       <div className="group relative flex flex-1 space-x-2 hover:opacity-75">
@@ -35,7 +46,15 @@ export default function ProductListItem({ product, onDelete }: Props) {
           € {product.price.toFixed(2)}
         </span>
       </div>
-      <div>
+      <div className="flex items-center space-x-2 self-start">
+        <input
+          className="w-16 rounded border p-1"
+          min={1}
+          step={1}
+          type="number"
+          value={quantity}
+          onChange={handleChange}
+        />
         <button
           className="text-gray-400 hover:text-gray-600"
           onClick={() => onDelete()}

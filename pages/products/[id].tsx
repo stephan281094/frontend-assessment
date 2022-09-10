@@ -40,7 +40,7 @@ export default function ProductDetail() {
         </p>
         <div className="flex space-x-2">
           <FavoriteButton
-            favorited={wishlist.state.includes(product.id)}
+            favorited={!!wishlist.state[product.id]}
             onClick={() =>
               wishlist.dispatch({ type: "toggle", payload: product.id })
             }

@@ -12,16 +12,23 @@ type ClearAction = {
 };
 type SetAction = {
   type: "set";
-  payload: number[];
+  payload: Record<number, number>;
 };
 type ToggleAction = {
   type: "toggle";
   payload: number;
 };
+type UpdateAction = {
+  type: "update";
+  payload: {
+    id: number;
+    quantity: number;
+  };
+};
 
-export type Action = ClearAction | SetAction | ToggleAction;
+export type Action = ClearAction | SetAction | ToggleAction | UpdateAction;
 export type Dispatch = (action: Action) => void;
-export type State = number[];
+export type State = Record<number, number>;
 
 const WishlistContext = createContext<
   { state: State; dispatch: Dispatch } | undefined
@@ -30,30 +37,40 @@ const WishlistContext = createContext<
 function wishlistReducer(state: State, action: Action) {
   switch (action.type) {
     case "clear": {
-      return [];
+      return {};
     }
     case "set": {
       return action.payload;
     }
     case "toggle": {
-      if (state.includes(action.payload)) {
-        return state.filter((item) => item !== action.payload);
+      if (state[action.payload]) {
+        const { [action.payload]: unused, ...rest } = state;
+        return rest;
       }
 
-      return [...state, action.payload];
+      return {
+        ...state,
+        [action.payload]: 1,
+      };
+    }
+    case "update": {
+      return {
+        ...state,
+        [action.payload.id]: action.payload.quantity,
+      };
     }
   }
 }
 
 function WishlistProvider({ children }: { children: React.ReactNode }) {
   const firstUpdate = useRef(true);
-  const [state, dispatch] = useReducer(wishlistReducer, []);
+  const [state, dispatch] = useReducer(wishlistReducer, {});
   const value = { state, dispatch };
 
   useEffect(() => {
     dispatch({
       type: "set",
-      payload: JSON.parse(window.localStorage.getItem("wishlist") || "[]"),
+      payload: JSON.parse(window.localStorage.getItem("wishlist") || "{}"),
     });
   }, []);
 

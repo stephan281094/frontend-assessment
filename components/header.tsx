@@ -18,8 +18,8 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   const favoriteProducts = useMemo(() => {
-    return wishlist.state
-      .map((id) => products.find((product) => product.id === id))
+    return Object.keys(wishlist.state)
+      .map((id) => products.find((product) => product.id === parseInt(id, 10)))
       .filter(Boolean);
   }, [products, wishlist.state]);
 
@@ -63,10 +63,12 @@ export default function Header() {
                   onClick={handleWishlist}
                 >
                   <span className="sr-only">Favorieten</span>
-                  <HeartSvg filled={wishlist.state.length > 0} />
-                  {wishlist.state.length > 0 && (
+                  <HeartSvg filled={favoriteProducts.length > 0} />
+                  {favoriteProducts.length > 0 && (
                     <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs text-white">
-                      {wishlist.state.length > 9 ? "9+" : wishlist.state.length}
+                      {favoriteProducts.length > 9
+                        ? "9+"
+                        : favoriteProducts.length}
                     </span>
                   )}
                 </a>
@@ -102,6 +104,16 @@ export default function Header() {
                       <ProductListItem
                         key={product!.id}
                         product={product!}
+                        quantity={wishlist.state[product!.id]}
+                        onChange={(quantity) =>
+                          wishlist.dispatch({
+                            type: "update",
+                            payload: {
+                              id: product!.id,
+                              quantity,
+                            },
+                          })
+                        }
                         onDelete={() =>
                           wishlist.dispatch({
                             type: "toggle",

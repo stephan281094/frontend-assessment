@@ -13,7 +13,7 @@ export default function Home() {
           <ProductItem
             key={product.id}
             product={product}
-            favorited={wishlist.state.includes(product.id)}
+            favorited={!!wishlist.state[product.id]}
           />
         ))}
       </div>

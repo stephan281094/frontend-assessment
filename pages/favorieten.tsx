@@ -8,8 +8,8 @@ export default function Favorites() {
   const wishlist = useWishlist();
 
   const favoriteProducts = useMemo(() => {
-    return wishlist.state
-      .map((id) => products.find((product) => product.id === id))
+    return Object.keys(wishlist.state)
+      .map((id) => products.find((product) => product.id === parseInt(id, 10)))
       .filter(Boolean);
   }, [products, wishlist.state]);
 
@@ -17,7 +17,7 @@ export default function Favorites() {
     <div className="py-6">
       <div className="flex">
         <h1 className="flex-1 text-2xl font-semibold">Mijn favorieten</h1>
-        {wishlist.state.length > 0 && (
+        {favoriteProducts.length > 0 && (
           <button
             className="text-sm text-gray-500 underline-offset-2 hover:underline"
             onClick={() => wishlist.dispatch({ type: "clear" })}
@@ -26,7 +26,7 @@ export default function Favorites() {
           </button>
         )}
       </div>
-      {wishlist.state.length === 0 ? (
+      {favoriteProducts.length === 0 ? (
         <p className="mt-4">
           Je hebt op dit moment geen producten in je favorieten.
         </p>
